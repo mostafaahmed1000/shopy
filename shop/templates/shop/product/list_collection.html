@@ -1,0 +1,48 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+  {{ collection.name }}
+{% endblock %}
+
+{% block content %}
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-7xl mx-auto">
+      <!-- Collection Header -->
+      <div class="@container">
+        {% if collection.cover %}
+        <div class="@[480px]:p-4">
+          <div
+            class="flex min-h-[300px] md:min-h-[480px] flex-col gap-4 md:gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-6 md:pb-10 @[480px]:px-10"
+            style="background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url('{{ collection.cover.url }}');"
+          >
+          {% if collection.slogan %}
+            <h1 class="text-white text-2xl md:text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl w-full">
+              {{ collection.slogan }}
+            </h1>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <!-- Products Grid -->
+      <div id="products" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3 p-2 md:p-4">
+        {% for product in products %}
+          <a href="{{ product.get_absolute_url }}">
+            <div class="flex flex-col gap-2 md:gap-3 pb-2 md:pb-3">
+              <div
+                class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                style="background-image: url('{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}');"
+              ></div>
+              <div>
+                <p class="text-[#111418] text-base font-medium leading-normal">{{ product.name }}</p>
+                <p class="text-[#637588] text-sm font-normal leading-normal">${{ product.price }}</p>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -8,93 +8,59 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-30 03:17+0300\n"
-"PO-Revision-Date: 2024-09-30 03:22+0000\n"
+"POT-Creation-Date: 2025-03-23 22:47+0200\n"
+"PO-Revision-Date: 2025-03-23 22:45+0000\n"
 "Last-Translator:   <admin@test.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: .\cart\forms.py:9 .\cart\templates\cart\detail.html:21
-#: .\payment\templates\payment\process.html:15
+#: .\cart\forms.py:9 .\shop\templates\shop\product\detail.html:28
 msgid "Quantity"
 msgstr "الكمية"
 
-#: .\cart\templates\cart\detail.html:6 .\cart\templates\cart\detail.html:10
+#: .\cart\templates\cart\detail.html:6 .\cart\templates\cart\detail.html:30
 msgid "Your shopping cart"
 msgstr "عربة التسوق"
 
-#: .\cart\templates\cart\detail.html:15
-#: .\payment\templates\payment\process.html:12
-msgid "Image"
-msgstr "صورة"
-
-#: .\cart\templates\cart\detail.html:18
-#: .\payment\templates\payment\process.html:13
-msgid "Product"
-msgstr "منتج"
-
-#: .\cart\templates\cart\detail.html:24 .\cart\templates\cart\detail.html:58
-msgid "Remove"
-msgstr "حذف"
-
-#: .\cart\templates\cart\detail.html:27
-msgid "Unit price"
-msgstr "سعر القطعة"
-
-#: .\cart\templates\cart\detail.html:30
-#: .\payment\templates\payment\process.html:14
-msgid "Price"
-msgstr "السعر"
-
-#: .\cart\templates\cart\detail.html:52
-msgid "Update"
-msgstr "تحديث"
-
-#: .\cart\templates\cart\detail.html:70
-#: .\payment\templates\payment\process.html:34
+#: .\cart\templates\cart\detail.html:93
+#: .\payment\templates\payment\process.html:42
 msgid "Subtotal"
 msgstr "المجموع قبل الخصم"
 
-#: .\cart\templates\cart\detail.html:77
+#: .\cart\templates\cart\detail.html:98
+#: .\payment\templates\payment\process.html:47
 #, python-format
 msgid ""
 "\n"
-"            \"%(code)s\" coupon (%(discount)s%% off)\n"
-"            "
+"                \"%(code)s\" (%(discount)s%% off)\n"
+"              "
 msgstr ""
 "\n"
-"            \"%(code)s\" كوبون (%(discount)s%% خصم)\n"
+"              \"%(code)s\" (%(discount)s%% خصم)\n"
 "            "
 
-#: .\cart\templates\cart\detail.html:87
-#: .\payment\templates\payment\process.html:16
-#: .\payment\templates\payment\process.html:53
+#: .\cart\templates\cart\detail.html:108
+#: .\payment\templates\payment\process.html:56
 msgid "Total"
 msgstr "المجموع"
 
-#: .\cart\templates\cart\detail.html:97
-#: .\shop\templates\shop\product\detail.html:25
-msgid "People who bought this also bought"
-msgstr "من أشتروا المنتج اعجبهم أيضا"
-
-#: .\cart\templates\cart\detail.html:116
+#: .\cart\templates\cart\detail.html:118
 msgid "Apply a coupon"
-msgstr "تطبيق الخصم"
+msgstr "إضافة كوبون خصم"
 
-#: .\cart\templates\cart\detail.html:120
-msgid "Apply"
-msgstr "تطبيق"
-
-#: .\cart\templates\cart\detail.html:124
+#: .\cart\templates\cart\detail.html:138
+#: .\payment\templates\payment\canceled.html:27
+#: .\payment\templates\payment\completed.html:22
 msgid "Continue shopping"
 msgstr "الإستمرار في التسوق"
 
-#: .\cart\templates\cart\detail.html:125
+#: .\cart\templates\cart\detail.html:142
 msgid "Checkout"
 msgstr "إنتهيت من التسوق"
 
@@ -103,26 +69,24 @@ msgid "Coupon"
 msgstr "كوبون"
 
 #: .\payment\templates\payment\canceled.html:4
+#: .\payment\templates\payment\canceled.html:15
 msgid "Payment canceled"
 msgstr "تم إلغاء العملية"
 
-#: .\payment\templates\payment\canceled.html:7
-msgid "Your payment has not been processed"
-msgstr "لم تتم العملية"
-
-#: .\payment\templates\payment\canceled.html:8
+#: .\payment\templates\payment\canceled.html:18
 msgid "There was a problem processing your payment."
 msgstr "هناك مشكلة في الدفع"
 
+#: .\payment\templates\payment\canceled.html:23
+msgid "Try again"
+msgstr "حاول مرة اخرى"
+
 #: .\payment\templates\payment\completed.html:4
+#: .\payment\templates\payment\completed.html:15
 msgid "Payment successful"
 msgstr "تم الدفع"
 
-#: .\payment\templates\payment\completed.html:7
-msgid "Your payment was successful"
-msgstr "نجحت عملية الدفع"
-
-#: .\payment\templates\payment\completed.html:8
+#: .\payment\templates\payment\completed.html:18
 msgid "Your payment has been processed successfully."
 msgstr "تمت عملية الدفع بنجاح"
 
@@ -130,22 +94,11 @@ msgstr "تمت عملية الدفع بنجاح"
 msgid "Pay your order"
 msgstr "دفع"
 
-#: .\payment\templates\payment\process.html:8
+#: .\payment\templates\payment\process.html:13
 msgid "Order summary"
 msgstr "تفاصيل الطلب"
 
-#: .\payment\templates\payment\process.html:42
-#, python-format
-msgid ""
-"\n"
-"              \"%(code)s\" (%(discount)s%% off)\n"
-"            "
-msgstr ""
-"\n"
-"              \"%(code)s\" (%(discount)s%% خصم)\n"
-"            "
-
-#: .\payment\templates\payment\process.html:62
+#: .\payment\templates\payment\process.html:68
 msgid "Pay now"
 msgstr "إدفع"
 
@@ -158,67 +111,100 @@ msgid "completed/"
 msgstr "أكتمل الدفع/"
 
 #: .\payment\urls.py:10
-#| msgid "Payment canceled"
 msgid "canceled/"
 msgstr "تم إلغاء العملية/"
 
-#: .\shop\templates\shop\base.html:9 .\shop\templates\shop\base.html:17
+#: .\shop\templates\shop\base.html:58
 msgid "Shopy"
 msgstr "شوبي"
 
-#: .\shop\templates\shop\base.html:22
-msgid "Language"
-msgstr "اللغة"
+#: .\shop\templates\shop\base.html:73 .\shop\templates\shop\base.html:149
+msgid "Search"
+msgstr "بحث"
 
-#: .\shop\templates\shop\base.html:38
-msgid "Your cart"
-msgstr "سلة المشتريات"
-
-#: .\shop\templates\shop\base.html:40
-#, python-format
-msgid ""
-"\n"
-"              %(items)s item, $%(total)s\n"
-"              "
-msgid_plural ""
-"\n"
-"              %(items)s items, $%(total)s\n"
-"              "
-msgstr[0] ""
-"\n"
-"              %(items)s منتج, $%(total)s\n"
-"              "
-msgstr[1] ""
-"\n"
-"              %(items)s منتجات, $%(total)s\n"
-"              "
-
-#: .\shop\templates\shop\base.html:47
-msgid "Your cart is empty."
-msgstr "سلة المشتريات فارغة"
-
-#: .\shop\templates\shop\product\detail.html:20
-msgid "Add to cart"
+#: .\shop\templates\shop\product\detail.html:50
+msgid "Add to Bag"
 msgstr "اضف الى السلة"
 
+#: .\shop\templates\shop\product\detail.html:55
+msgid "People who bought this also bought"
+msgstr "من أشتروا المنتج اعجبهم أيضا"
+
+#: .\shop\templates\shop\product\detail.html:78
+#: .\shop\templates\shop\product\detail.html:101
+msgid "Details"
+msgstr "تفاصيل"
+
+#: .\shop\templates\shop\product\detail.html:88
+#: .\shop\templates\shop\product\detail.html:110
+msgid "Shipping &amp; Returns"
+msgstr "الشحن و الإسترجاع"
+
+#: .\shop\templates\shop\product\detail.html:91
+#: .\shop\templates\shop\product\detail.html:113
+msgid "Free Shipping"
+msgstr "شحن مجاني"
+
+#: .\shop\templates\shop\product\detail.html:92
+#: .\shop\templates\shop\product\detail.html:114
+msgid "Free returns within 90 days"
+msgstr "إسترجاع مجاني خلال 90 يوم"
+
+#: .\shop\templates\shop\product\detail.html:93
+#: .\shop\templates\shop\product\detail.html:115
+msgid "Delivery in 4-7 business days"
+msgstr "توصيل خلال 4-7 ايام عمل"
+
 #: .\shop\templates\shop\product\list.html:6
-#: .\shop\templates\shop\product\list.html:24
 msgid "Products"
 msgstr "المنتجات"
 
-#: .\shop\templates\shop\product\list.html:11
-msgid "Categories"
-msgstr "تصنيفات"
+#: .\shop\templates\shop\product\list.html:17
+msgid "Discover our latest collection"
+msgstr "إكتشف أخر مجموعاتنا"
 
-#: .\shop\templates\shop\product\list.html:14
+#: .\shop\templates\shop\product\list.html:22
+msgid "Shop now"
+msgstr "تسوق الآن"
+
+#: .\shop\templates\shop\product\list.html:35
+msgid "Summer Collection"
+msgstr "مجموعة الصيف"
+
+#: .\shop\templates\shop\product\list.html:42
+msgid "For Day on the Beach"
+msgstr "من أجل يوم على الشاطئ"
+
+#: .\shop\templates\shop\product\list.html:49
+msgid "Stride with Comfort"
+msgstr "إخطي براحة"
+
+#: .\shop\templates\shop\product\list.html:57
 msgid "All"
 msgstr "الكل"
 
-#: .\shopy\settings.py:119
+#: .\shop\templates\shop\product\search_results.html:7
+msgid "Search Results"
+msgstr "نتائج البحث"
+
+#: .\shop\templates\shop\product\search_results.html:10
+#, python-format
+msgid "Results for \"%(query)s\""
+msgstr "نتائج البحث عن  \"%(query)s\""
+
+#: .\shop\templates\shop\product\search_results.html:31
+msgid "No products found."
+msgstr "لم يتم العثور على منتج"
+
+#: .\shop\templates\shop\product\search_results.html:33
+msgid "Browse all products"
+msgstr "تصفح جميع منتجاتنا"
+
+#: .\shopy\settings\base.py:109
 msgid "English"
 msgstr "إنجليزي"
 
-#: .\shopy\settings.py:120
+#: .\shopy\settings\base.py:110
 msgid "Arabic"
 msgstr "عربي"
 
@@ -235,9 +221,75 @@ msgid "payment/"
 msgstr "الدفع/"
 
 #: .\shopy\urls.py:14
-#| msgid "Coupon"
 msgid "coupons/"
 msgstr "كوبون/"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "              \"%(code)s\" coupon (%(discount)s%% off)\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "            \"%(code)s\" كوبون (%(discount)s%% خصم)\n"
+#~ "            "
+
+#~ msgid "Image"
+#~ msgstr "صورة"
+
+#~ msgid "Product"
+#~ msgstr "منتج"
+
+#~ msgid "Remove"
+#~ msgstr "حذف"
+
+#~ msgid "Unit price"
+#~ msgstr "سعر القطعة"
+
+#~ msgid "Price"
+#~ msgstr "السعر"
+
+#~ msgid "Update"
+#~ msgstr "تحديث"
+
+#~ msgid "Apply"
+#~ msgstr "تطبيق"
+
+#~ msgid "Your payment has not been processed"
+#~ msgstr "لم تتم العملية"
+
+#~ msgid "Your payment was successful"
+#~ msgstr "نجحت عملية الدفع"
+
+#~ msgid "Language"
+#~ msgstr "اللغة"
+
+#~ msgid "Your cart"
+#~ msgstr "سلة المشتريات"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "              %(items)s item, $%(total)s\n"
+#~ "              "
+#~ msgid_plural ""
+#~ "\n"
+#~ "              %(items)s items, $%(total)s\n"
+#~ "              "
+#~ msgstr[0] ""
+#~ "\n"
+#~ "              %(items)s منتج, $%(total)s\n"
+#~ "              "
+#~ msgstr[1] ""
+#~ "\n"
+#~ "              %(items)s منتجات, $%(total)s\n"
+#~ "              "
+
+#~ msgid "Your cart is empty."
+#~ msgstr "سلة المشتريات فارغة"
+
+#~ msgid "Categories"
+#~ msgstr "تصنيفات"
 
 #~ msgid "My shop"
 #~ msgstr "متجري"

@@ -4,6 +4,29 @@
 {% block title %}{% trans "Payment canceled" %}{% endblock %}
 
 {% block content %}
-  <h1>{% trans "Your payment has not been processed" %}</h1>
-  <p>{% trans "There was a problem processing your payment." %}</p>
+<div class="px-40 flex flex-1 justify-center py-5">
+  <div class="layout-content-container flex flex-col max-w-[960px] flex-1 items-center text-center py-16">
+    <div class="bg-[#fef2f2] rounded-full p-4 mb-6">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#dc2626" viewBox="0 0 256 256">
+        <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/>
+      </svg>
+    </div>
+    <h1 class="text-[#111418] text-4xl font-black leading-tight tracking-[-0.033em] mb-4">
+      {% trans "Payment canceled" %}
+    </h1>
+    <p class="text-[#637588] text-lg max-w-[480px] mb-8">
+      {% trans "There was a problem processing your payment." %}
+    </p>
+    <div class="flex gap-4">
+      <a href="{% url 'payment:process' %}" 
+         class="inline-flex h-14 items-center justify-center rounded-xl border border-transparent bg-[#111418] px-6 text-base font-medium text-white hover:bg-[#23272c]">
+        {% trans "Try again" %}
+      </a>
+      <a href="{% url 'shop:product_list' %}" 
+         class="inline-flex h-14 items-center justify-center rounded-xl border border-[#dce0e5] bg-white px-6 text-base font-medium leading-normal text-[#637588] hover:bg-gray-50">
+        {% trans "Continue shopping" %}
+      </a>
+    </div>
+  </div>
+</div>
 {% endblock %}

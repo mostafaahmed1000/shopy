@@ -7,102 +7,142 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{% trans 'Your shopping cart' %}</h1>
-  <table class="cart">
-    <thead>
-      <tr>
-        <th>
-          {% trans 'Image' %}
-        </th>
-        <th>
-          {% trans 'Product' %}
-        </th>
-        <th>
-          {% trans 'Quantity' %}
-        </th>
-        <th>
-          {% trans 'Remove' %}
-        </th>
-        <th>
-          {% trans 'Unit price' %}
-        </th>
-        <th>
-          {% trans 'Price' %}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
+<script>
+  function handleQuantityChange(form, change) {
+    const quantityInput = form.querySelector('input[type="number"]');
+    const currentValue = parseInt(quantityInput.value);
+    
+    if (change !== 0) {
+      const newValue = currentValue + change;
+      if (newValue < 1) return;
+      quantityInput.value = newValue;
+    }
+    
+    form.submit();
+  }
+</script>
+
+  <div class="px-2 md:px-6 lg:px-40 flex flex-1 justify-center py-3 md:py-5">
+    <div class="layout-content-container flex flex-col w-full max-w-[960px] flex-1">
+      <!-- Header -->
+      <div class="flex flex-wrap justify-between gap-3 p-2 md:p-4">
+        <p class="text-[#111418] text-2xl md:text-4xl font-black leading-tight tracking-[-0.033em] w-full md:min-w-72">
+          {% trans 'Your shopping cart' %}
+        </p>
+      </div>
+
+      <!-- Cart Items -->
       {% for item in cart %}
         {% with product=item.product %}
-          <tr>
-            <td>
-              <a href="{{ product.get_absolute_url }}">
-                <img src="{% if product.image %}
-                    {{ product.image.url }}
-                  {% else %}
-                    {% static 'img/no_image.png' %}
-                  {% endif %}" />
-              </a>
-            </td>
-            <td>{{ product.name }}</td>
-            <td>
-              <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                {{ item.update_quantity_form.quantity }}
-                {{ item.update_quantity_form.override }}
-                <input type="submit" value="{% trans 'Update' %}" />
-                {% csrf_token %}
-              </form>
-            </td>
-            <td>
-              <form action="{% url 'cart:cart_remove' product.id %}" method="post">
-                <input type="submit" value="{% trans 'Remove' %}" />
-                {% csrf_token %}
-              </form>
-            </td>
-            <td class="num">${{ item.price }}</td>
-            <td class="num">${{ item.total_price }}</td>
-          </tr>
+          <div class="flex flex-col md:flex-row gap-4 bg-white px-3 md:px-4 py-3 items-start md:items-center">
+            <!-- Product Image and Info -->
+            <div class="flex items-start gap-4 flex-1 w-full md:max-w-[400px]">
+              <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-[60px] md:size-[70px]"
+                   style="background-image: url('{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}');">
+              </div>
+              <div class="flex flex-1 flex-col justify-center">
+                <p class="text-[#111418] text-sm md:text-base font-medium leading-normal">{{ product.name }}</p>
+                <p class="text-[#637588] text-xs md:text-sm font-normal leading-normal">${{ item.price }}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between w-full md:w-auto gap-4 md:gap-8">
+              <!-- Quantity Controls -->
+              <div class="flex items-center justify-start md:w-32 md:justify-center">
+                <form action="{% url 'cart:cart_add' product.id %}" method="post" class="flex items-center" id="form-{{ product.id }}">
+                  {% csrf_token %}
+                  <div class="flex items-center gap-2 text-[#111418]">
+                    <button type="button" 
+                            onclick="handleQuantityChange(this.form, -1)"
+                            class="text-sm md:text-base font-medium leading-normal flex h-7 w-7 items-center justify-center rounded-full bg-[#f0f2f4] cursor-pointer">-</button>
+                    <input name="{{ item.update_quantity_form.quantity.name }}"
+                           class="text-sm md:text-base font-medium leading-normal w-4 p-0 text-center bg-transparent focus:outline-0 focus:ring-0 focus:border-none border-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                           type="number"
+                           value="{{ item.quantity }}"
+                           min="1"
+                           onchange="handleQuantityChange(this.form, 0)" />
+                    <button type="button" 
+                            onclick="handleQuantityChange(this.form, 1)"
+                            class="text-sm md:text-base font-medium leading-normal flex h-7 w-7 items-center justify-center rounded-full bg-[#f0f2f4] cursor-pointer">+</button>
+                  </div>
+                  <input type="hidden" name="{{ item.update_quantity_form.override.name }}" value="True" />
+                </form>
+              </div>
+
+              <!-- Total Price and Remove -->
+              <div class="flex items-center gap-4">
+                <p class="text-[#111418] text-sm md:text-base font-medium leading-normal">${{ item.total_price }}</p>
+                <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="flex h-6 w-6 items-center justify-center text-[#637588]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                      <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         {% endwith %}
       {% endfor %}
-      {% if cart.coupon %}
-        <tr class="subtotal">
-          <td>
-            {% trans 'Subtotal' %}
-          </td>
-          <td colspan="4"></td>
-          <td class="num">${{ cart.get_total_price|floatformat:2 }}</td>
-        </tr>
-        <tr>
-          <td>
-            {% blocktrans with code=cart.coupon.code discount=cart.coupon.discount %}
-            "{{ code }}" coupon ({{ discount }}% off)
-            {% endblocktrans %}
-          </td>
-          <td colspan="4"></td>
-          <td class="num neg">- ${{ cart.get_discount|floatformat:2 }}</td>
-        </tr>
-      {% endif %}
-      <tr class="total">
-        <td>
-          {% trans 'Total' %}
-        </td>
-        <td colspan="4"></td>
-        <td class="num">${{ cart.get_total_price_after_discount|floatformat:2 }}</td>
-      </tr>
-    </tbody>
-  </table>
 
+      <!-- Price Summary Section -->
+      <div class="mt-4 border-t border-[#dce0e5]">
+        {% if cart.coupon %}
+          <div class="flex justify-between px-3 md:px-4 py-3">
+            <p class="text-[#637588] text-sm md:text-base font-normal leading-normal">{% trans 'Subtotal' %}</p>
+            <p class="text-[#111418] text-sm md:text-base font-medium leading-normal">${{ cart.get_total_price|floatformat:2 }}</p>
+          </div>
+          <div class="flex justify-between px-3 md:px-4 py-3">
+            <p class="text-[#637588] text-sm md:text-base font-normal leading-normal">
+              {% blocktrans with code=cart.coupon.code discount=cart.coupon.discount %}
+                "{{ code }}" ({{ discount }}% off)
+              {% endblocktrans %}
+            </p>
+            <p class="text-[#dc2626] text-sm md:text-base font-medium leading-normal">-${{ cart.get_discount|floatformat:2 }}</p>
+          </div>
+        {% endif %}
 
-  <p>
-    {% trans 'Apply a coupon' %}:
-  </p>
-  <form action="{% url 'coupons:apply' %}" method="post">
-    {{ coupon_apply_form }}
-    <input type="submit" value="{% trans 'Apply' %}" />
-    {% csrf_token %}
-  </form>
-  <p class="text-right">
-    <a href="{% url 'shop:product_list' %}" class="button light">{% trans 'Continue shopping' %}</a>
-    <a href="{% url 'orders:order_create' %}" class="button">{% trans 'Checkout' %}</a>
-  </p>
+        <!-- Total -->
+        <div class="flex justify-between px-3 md:px-4 py-3 border-t border-[#dce0e5]">
+          <p class="text-[#111418] text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">{% trans 'Total' %}</p>
+          <p class="text-[#111418] text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">${{ cart.get_total_price_after_discount|floatformat:2 }}</p>
+        </div>
+      </div>
+
+      <!-- Coupon and Actions Section -->
+      <div class="flex flex-col md:flex-row justify-between gap-4 px-3 md:px-4 py-3">
+        <!-- Coupon Form -->
+        <div class="w-full md:max-w-[480px]">
+          <h3 class="text-[#111418] text-base md:text-lg font-bold leading-tight tracking-[-0.015em] pb-2">
+        {% trans 'Apply a coupon' %}
+          </h3>
+          <form action="{% url 'coupons:apply' %}" method="post" class="flex w-full">
+        {% csrf_token %}
+        <input name="code"
+           placeholder="Coupon code"
+           class="flex-1 rounded-l-xl border border-[#dce0e5] p-3 text-sm md:text-base"
+           value="" />
+        <button type="submit"
+            class="rounded-r-xl border border-l-0 border-[#dce0e5] bg-white px-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+            <path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/>
+          </svg>
+        </button>
+          </form>
+        </div>
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-2 md:gap-4 md:min-w-[420px] mt-auto">
+          <a href="{% url 'shop:product_list' %}" 
+         class="flex h-12 md:h-12 items-center justify-center rounded-xl border border-[#dce0e5] bg-white px-4 text-sm md:text-base font-medium leading-normal text-[#637588] hover:bg-gray-50">
+        {% trans 'Continue shopping' %}
+          </a>
+          <a href="{% url 'orders:order_create' %}" 
+         class="flex h-12 md:h-12 items-center justify-center rounded-xl border border-transparent bg-[#111418] px-4 text-sm md:text-base font-medium leading-normal text-white hover:bg-[#2a2f35]">
+        {% trans 'Checkout' %}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

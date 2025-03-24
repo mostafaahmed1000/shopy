@@ -1,39 +1,154 @@
-{% load i18n %}
+<!DOCTYPE html>
 <html>
-  <body>
-    <h1>{% trans 'Shopy' %}</h1>
-    <p>
-      {% trans 'Invoice no.' %} {{ order.id }}<br />
-      <span class="secondary">{{ order.created|date:'M d, Y' }}</span>
-    </p>
-    <h3>{% trans 'Bill to' %}</h3>
-    <p>
-      {{ order.first_name }} {{ order.last_name }}<br />
-      {{ order.email }}<br />
-      {{ order.address }}<br />
-      {{ order.postal_code }}, {{ order.city }}
-    </p>
-    <h3>{% trans 'Items bought' %}</h3>
+<head>
+  {% load i18n %}
+  <meta charset="utf-8">
+  <style>
+    /* Base styles for PDF compatibility */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .container {
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .invoice-details {
+      margin-bottom: 32px;
+      color: #374151;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .customer-info {
+      color: #4b5563;
+      line-height: 1.5;
+      margin-bottom: 32px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+
+    th {
+      background-color: #f3f4f6;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: #111827;
+      font-size: 14px;
+    }
+
+    td {
+      padding: 12px 16px;
+      color: #4b5563;
+      font-size: 14px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .num {
+      text-align: right;
+    }
+
+    .subtotal td {
+      background-color: #f9fafb;
+    }
+
+    .total td {
+      font-weight: 600;
+      color: #111827;
+      background-color: #f3f4f6;
+    }
+
+    .discount {
+      color: #dc2626;
+    }
+
+    .status-stamp {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      padding: 8px 16px;
+      border: 2px solid;
+      border-radius: 6px;
+      font-weight: 600;
+      transform: rotate(-15deg);
+    }
+
+    .paid {
+      color: #059669;
+      border-color: #059669;
+    }
+
+    .pending {
+      color: #dc2626;
+      border-color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Status Stamp -->
+    <div class="status-stamp {% if order.paid %}paid{% else %}pending{% endif %}">
+      {% if order.paid %}{% trans 'Paid' %}{% else %}{% trans 'Pending' %}{% endif %}
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">{% trans 'Shopy' %}</div>
+      <div class="invoice-details">
+        <p>{% trans 'Invoice no.' %} {{ order.id }}</p>
+        <p>{{ order.created|date:'M d, Y' }}</p>
+      </div>
+    </div>
+
+    <!-- Bill To Section -->
+    <div class="section-title">{% trans 'Bill to' %}</div>
+    <div class="customer-info">
+      <p>{{ order.first_name }} {{ order.last_name }}</p>
+      <p>{{ order.email }}</p>
+      <p>{{ order.address }}</p>
+      <p>{{ order.postal_code }}, {{ order.city }}</p>
+    </div>
+
+    <!-- Items Table -->
+    <div class="section-title">{% trans 'Items bought' %}</div>
     <table>
       <thead>
         <tr>
-          <th>
-            {% trans 'Product' %}
-          </th>
-          <th>
-            {% trans 'Price' %}
-          </th>
-          <th>
-            {% trans 'Quantity' %}
-          </th>
-          <th>
-            {% trans 'Cost' %}
-          </th>
+          <th>{% trans 'Product' %}</th>
+          <th class="num">{% trans 'Price' %}</th>
+          <th class="num">{% trans 'Quantity' %}</th>
+          <th class="num">{% trans 'Cost' %}</th>
         </tr>
       </thead>
       <tbody>
         {% for item in order.items.all %}
-          <tr class="row{% cycle '1' '2' %}">
+          <tr>
             <td>{{ item.product.name }}</td>
             <td class="num">${{ item.price }}</td>
             <td class="num">{{ item.quantity }}</td>
@@ -43,103 +158,25 @@
 
         {% if order.coupon %}
           <tr class="subtotal">
-            <td colspan="3">
-              {% trans 'Subtotal' %}
-            </td>
+            <td colspan="3">{% trans 'Subtotal' %}</td>
             <td class="num">${{ order.get_total_cost_before_discount|floatformat:2 }}</td>
           </tr>
           <tr>
             <td colspan="3">
-              {% blocktrans with code=order.coupon.code discount=order.discount %}"{{ code }}" ({{ discount }}% off){% endblocktrans %}
+              {% blocktrans with code=order.coupon.code discount=order.discount %}
+                "{{ code }}" ({{ discount }}% off)
+              {% endblocktrans %}
             </td>
-            <td class="num neg">- ${{ order.get_discount|floatformat:2 }}</td>
+            <td class="num discount">-${{ order.get_discount|floatformat:2 }}</td>
           </tr>
         {% endif %}
 
         <tr class="total">
-          <td colspan="3">
-            {% trans 'Total' %}
-          </td>
+          <td colspan="3">{% trans 'Total' %}</td>
           <td class="num">${{ order.get_total_cost|floatformat:2 }}</td>
         </tr>
       </tbody>
     </table>
-
-    <span class="{% if order.paid %}
-        paid
-      {% else %}
-        pending
-      {% endif %}">
-      {% if order.paid %}
-        {% trans 'Paid' %}
-      {% else %}
-        {% trans 'Pending payment' %}
-      {% endif %}
-    </span>
-  </body>
+  </div>
+</body>
 </html>
-
-<style>
-  body {
-    font-family: Helvetica, sans-serif;
-    color: #222;
-    line-height: 1.5;
-  }
-  
-  table {
-    width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
-    margin: 20px 0;
-  }
-  
-  table th,
-  table td {
-    text-align: left;
-    font-size: 14px;
-    padding: 10px;
-    margin: 0;
-  }
-  
-  tbody tr:nth-child(odd) {
-    background: #efefef;
-  }
-  
-  thead th,
-  tbody tr.total {
-    background: #5993bb;
-    color: #fff;
-    font-weight: bold;
-  }
-  
-  h1 {
-    margin: 0;
-  }
-  
-  .secondary {
-    color: #bbb;
-    margin-bottom: 20px;
-  }
-  
-  .num {
-    text-align: right;
-  }
-  
-  .paid,
-  .pending {
-    color: #1bae37;
-    border: 4px solid #1bae37;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 22px;
-    padding: 4px 12px 0px;
-    float: right;
-    transform: rotate(-15deg);
-    margin-right: 40px;
-  }
-  
-  .pending {
-    color: #a82d2d;
-    border: 4px solid #a82d2d;
-  }
-</style>

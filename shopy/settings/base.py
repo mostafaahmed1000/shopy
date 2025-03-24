@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = "django-insecure-h9%&7y*)i$l7g4gp$^+b9zh@_a4#byozxiqtq0z_7k%!#2+(hk"
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
@@ -158,3 +158,10 @@ PARLER_LANGUAGES = {
         "hide_untranslated": False,
     },
 }
+
+# Add this setting for CSRF trusted origins
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok-free.app',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]

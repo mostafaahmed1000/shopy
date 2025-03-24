@@ -1,0 +1,39 @@
+{% extends "shop/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+  <div class="px-2 md:px-4">
+    <h1 class="text-xl md:text-2xl font-bold mb-2 md:mb-4">{% trans "Search Results" %}</h1>
+    {% if query %}
+      <p class="text-sm md:text-base mb-2 md:mb-4 text-gray-600">
+        {% blocktrans %}Results for "{{ query }}"{% endblocktrans %}
+      </p>
+      {% if products %}
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-4">
+          {% for product in products %}
+          <a href="{{ product.get_absolute_url }}" class="block">
+            <div class="flex flex-col gap-2">
+              <div 
+                class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                style="background-image: url('{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}');"
+              ></div>
+              <div class="px-1">
+                <h2 class="text-[#111418] text-sm md:text-base font-medium leading-tight truncate">{{ product.name }}</h2>
+                <p class="text-[#637588] text-sm font-normal leading-normal">${{ product.price }}</p>
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="flex flex-col items-center justify-center py-8">
+          <p class="text-gray-500 text-sm md:text-base">{% trans "No products found." %}</p>
+          <a href="{% url 'shop:product_list' %}" class="mt-4 px-4 py-2 bg-[#1980e6] text-white rounded-xl text-sm md:text-base">
+            {% trans "Browse all products" %}
+          </a>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endblock %}

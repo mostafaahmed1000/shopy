@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-30 03:17+0300\n"
+"POT-Creation-Date: 2025-03-23 08:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,72 +42,87 @@ msgstr ""
 msgid "city"
 msgstr ""
 
-#: .\orders\templates\orders\order\create.html:4
-#: .\orders\templates\orders\order\create.html:7
+#: .\orders\templates\orders\order\create.html:6
+#: .\orders\templates\orders\order\create.html:15
 msgid "Checkout"
 msgstr ""
 
-#: .\orders\templates\orders\order\create.html:9
-msgid "Your order"
+#: .\orders\templates\orders\order\create.html:23
+msgid "Order Summary"
 msgstr ""
 
-#: .\orders\templates\orders\order\create.html:19
-#: .\orders\templates\orders\order\pdf.html:53
-#, python-format
-msgid "\"%(code)s\" (%(discount)s%% off)"
-msgstr ""
-
-#: .\orders\templates\orders\order\create.html:25
-#: .\orders\templates\orders\order\pdf.html:61
-msgid "Total"
-msgstr ""
-
-#: .\orders\templates\orders\order\create.html:31
-msgid "Place order"
-msgstr ""
-
-#: .\orders\templates\orders\order\pdf.html:4
-msgid "My shop"
-msgstr ""
-
-#: .\orders\templates\orders\order\pdf.html:6
-msgid "Invoice no."
-msgstr ""
-
-#: .\orders\templates\orders\order\pdf.html:9
-msgid "Bill to"
-msgstr ""
-
-#: .\orders\templates\orders\order\pdf.html:16
-msgid "Items bought"
-msgstr ""
-
-#: .\orders\templates\orders\order\pdf.html:21
-msgid "Product"
-msgstr ""
-
-#: .\orders\templates\orders\order\pdf.html:24
-msgid "Price"
-msgstr ""
-
-#: .\orders\templates\orders\order\pdf.html:27
-msgid "Quantity"
-msgstr ""
-
-#: .\orders\templates\orders\order\pdf.html:30
-msgid "Cost"
-msgstr ""
-
-#: .\orders\templates\orders\order\pdf.html:47
+#: .\orders\templates\orders\order\create.html:39
+#: .\orders\templates\orders\order\pdf.html:161
 msgid "Subtotal"
 msgstr ""
 
-#: .\orders\templates\orders\order\pdf.html:74
+#: .\orders\templates\orders\order\create.html:44
+#, python-format
+msgid ""
+"\n"
+"                    \"%(code)s\" (%(discount)s%% off)\n"
+"                  "
+msgstr ""
+
+#: .\orders\templates\orders\order\create.html:53
+#: .\orders\templates\orders\order\pdf.html:175
+msgid "Total"
+msgstr ""
+
+#: .\orders\templates\orders\order\create.html:63
+msgid "Shipping Information"
+msgstr ""
+
+#: .\orders\templates\orders\order\create.html:136
+msgid "Place order"
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:117
 msgid "Paid"
 msgstr ""
 
-#: .\orders\templates\orders\order\pdf.html:76
-msgid "Pending payment"
+#: .\orders\templates\orders\order\pdf.html:117
+msgid "Pending"
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:122
+msgid "Shopy"
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:124
+msgid "Invoice no."
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:130
+msgid "Bill to"
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:139
+msgid "Items bought"
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:143
+msgid "Product"
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:144
+msgid "Price"
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:145
+msgid "Quantity"
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:146
+msgid "Cost"
+msgstr ""
+
+#: .\orders\templates\orders\order\pdf.html:166
+#, python-format
+msgid ""
+"\n"
+"                \"%(code)s\" (%(discount)s%% off)\n"
+"              "
 msgstr ""
 
 #: .\orders\urls.py:7

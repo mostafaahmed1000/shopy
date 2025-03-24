@@ -7,30 +7,69 @@
 {% endblock %}
 
 {% block content %}
-  <div id="sidebar">
-    <h3>{% trans "Categories" %}</h3>
-    <ul>
-      <li {% if not category %}class="selected"{% endif %}>
-        <a href="{% url "shop:product_list" %}">{% trans "All" %}</a>
-      </li>
-      {% for c in categories %}
-        <li {% if category.slug == c.slug %}class="selected"{% endif %}>
-          <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
-        </li>
-      {% endfor %}
-    </ul>
+<div class="@container">
+  <div class="@[480px]:p-4">
+    <div
+      class="flex min-h-[300px] md:min-h-[480px] flex-col gap-4 md:gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-6 md:pb-10 @[480px]:px-10"
+      style='background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("{% get_media_prefix %}hannah-morgan-ycVFts5Ma4s-unsplash.jpg");'
+    >
+      <h1 class="text-white text-2xl md:text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl w-full">
+        {% trans "Discover our latest collection" %}
+      </h1>
+      <button
+        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#1980e6] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+      >
+        <a href="#products"><span class="truncate">{% trans "Shop now" %}</span></a>
+      </button>
+    </div>
   </div>
-  <div id="main" class="product-list">
-    <h1>{% if category %}{{ category.name }}{% else %}{% trans "Products" %}{% endif %}</h1>
-    {% for product in products %}
-      <div class="item">
-        <a href="{{ product.get_absolute_url }}">
-          <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
-        </a>
-        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-        <br>
-        ${{ product.price }}
-      </div>
+</div>
+
+<div class="flex overflow-x-auto overflow-y-hidden scrollbar-hide snap-x snap-mandatory">
+  <div class="flex items-stretch p-2 md:p-4 gap-2 md:gap-3">
+    {% for collection in collections %}
+    <a href="{{ collection.get_absolute_url }}">
+    <div class="flex h-full flex-1 flex-col gap-3 md:gap-4 rounded-lg min-w-[140px] md:min-w-60 snap-start">
+      <div
+        class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl flex flex-col"
+        style="background-image: url('{{ collection.cover.url}}');"
+      ></div>
+      <p class="text-[#111418] text-base font-medium leading-normal">{{ collection.name }}</p>
+    </div>
+    </a>
     {% endfor %}
   </div>
+</div>
+
+<div class="flex gap-2 md:gap-3 p-2 md:p-3 flex-wrap">
+  <a href="{% url "shop:product_list" %}">
+    <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl pl-4 pr-4 {% if not category %} bg-[#a1a5ab] {% else %} bg-[#f0f2f4] {% endif %}">
+      <p class="text-[#111418] text-sm font-medium leading-normal">{% trans "All" %}</p>
+    </div>
+  </a>
+  {% for c in categories %}
+    <a href="{{ c.get_absolute_url }}">
+      <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl {% if category.slug == c.slug %} bg-[#a1a5ab] {% else %} bg-[#f0f2f4] {% endif %} pl-4 pr-4">
+        <p class="text-[#111418] text-sm font-medium leading-normal">{{ c.name }}</p>
+      </div>
+    </a>
+  {% endfor %}
+</div>
+
+<div id="products" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3 p-2 md:p-4">
+  {% for product in products %}
+    <a href="{{ product.get_absolute_url }}">
+      <div class="flex flex-col gap-2 md:gap-3 pb-2 md:pb-3 border-b border-gray-300 rounded-xl" >
+        <div
+            class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-t-xl"
+          style="background-image: url('{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}');"
+        ></div>
+        <div>
+          <p class="text-[#111418] text-base font-medium leading-normal">{{ product.name }}</p>
+          <p class="text-[#637588] text-sm font-normal leading-normal">${{ product.price }}</p>
+        </div>
+      </div>
+    </a>
+  {% endfor %}
+</div>
 {% endblock %}

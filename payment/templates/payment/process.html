@@ -5,61 +5,70 @@
 {% block title %}{% trans "Pay your order" %}{% endblock %}
 
 {% block content %}
-  <h1>{% trans "Order summary" %}</h1>
-  <table class="cart">
-    <thead>
-      <tr>
-        <th>{% trans "Image" %}</th>
-        <th>{% trans "Product" %}</th>
-        <th>{% trans "Price" %}</th>
-        <th>{% trans "Quantity" %}</th>
-        <th>{% trans "Total" %}</th>
-      </tr>
-    </thead>
-    <tbody>
+<div class="flex flex-1 justify-center">
+  <div class="layout-content-container flex flex-col w-full flex-1">
+    <!-- Header -->
+    <div class="flex flex-wrap justify-between gap-3 p-2 md:p-4">
+      <p class="text-[#111418] text-xl md:text-4xl font-black leading-tight tracking-[-0.033em] w-full">
+        {% trans "Order summary" %}
+      </p>
+    </div>
+
+    <!-- Order Items -->
+    <div class="bg-white rounded-xl overflow-hidden shadow-sm">
       {% for item in order.items.all %}
-        <tr class="row{% cycle "1" "2" %}">
-          <td>
-            <img src="{% if item.product.image %}{{ item.product.image.url }}
-            {% else %}{% static "img/no_image.png" %}{% endif %}">
-          </td>
-          <td>{{ item.product.name }}</td>
-          <td class="num">${{ item.price }}</td>
-          <td class="num">{{ item.quantity }}</td>
-          <td class="num">${{ item.get_cost }}</td>
-        </tr>
+        <div class="flex flex-row gap-3 md:gap-4 px-3 md:px-4 py-2 md:py-3 items-center {% if not forloop.last %}border-b border-[#dce0e5]{% endif %}">
+          <div class="size-[50px] md:size-[70px] shrink-0 bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
+               style="background-image: url('{% if item.product.image %}{{ item.product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}');">
+          </div>
+          <div class="flex flex-1 flex-col justify-center min-w-0">
+            <p class="text-[#111418] text-sm md:text-base font-medium leading-normal truncate">{{ item.product.name }}</p>
+            <div class="flex items-center gap-2 text-xs md:text-sm text-[#637588]">
+              <span>${{ item.price }}</span>
+              <span>•</span>
+              <span>{{ item.quantity }}×</span>
+            </div>
+          </div>
+          <div class="text-right shrink-0">
+            <p class="text-[#111418] text-sm md:text-base font-medium">${{ item.get_cost }}</p>
+          </div>
+        </div>
       {% endfor %}
-      {% if order.coupon %}
-        <tr class="subtotal">
-          <td>{% trans "Subtotal" %}</td>
-          <td colspan="3"></td>
-          <td class="num">
-            ${{ order.get_total_cost_before_discount|floatformat:2 }}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            {% blocktrans with code=order.coupon.code discount=order.discount %}
-              "{{ code }}" ({{ discount }}% off)
-            {% endblocktrans %}
-          </td>
-          <td colspan="3"></td>
-          <td class="num neg">
-            - ${{ order.get_discount|floatformat:2 }}
-          </td>
-        </tr>
-      {% endif %}
-      <tr class="total">
-        <td>{% trans "Total" %}</td>
-        <td colspan="3"></td>
-        <td class="num">
-          ${{ order.get_total_cost|floatformat:2 }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <form action="{% url "payment:process" %}" method="post">
-    <input type="submit" value="{% trans "Pay now" %}">
-    {% csrf_token %}
-  </form>
+
+      <!-- Order Total Section -->
+      <div class="mt-2 divide-y divide-[#dce0e5]">
+        {% if order.coupon %}
+          <div class="flex justify-between px-3 md:px-4 py-2 md:py-3 bg-[#f9fafb]">
+            <span class="text-[#637588] text-sm md:text-base">{% trans "Subtotal" %}</span>
+            <span class="text-[#111418] text-sm md:text-base font-medium">${{ order.get_total_cost_before_discount|floatformat:2 }}</span>
+          </div>
+          <div class="flex justify-between px-3 md:px-4 py-2 md:py-3">
+            <span class="text-[#637588] text-sm md:text-base truncate mr-2">
+              {% blocktrans with code=order.coupon.code discount=order.discount %}
+                "{{ code }}" ({{ discount }}% off)
+              {% endblocktrans %}
+            </span>
+            <span class="text-[#dc2626] text-sm md:text-base font-medium shrink-0">- ${{ order.get_discount|floatformat:2 }}</span>
+          </div>
+        {% endif %}
+        
+        <div class="flex justify-between px-3 md:px-4 py-2 md:py-3 bg-[#f9fafb]">
+          <span class="text-[#111418] text-base md:text-lg font-bold">{% trans "Total" %}</span>
+          <span class="text-[#111418] text-base md:text-lg font-bold">${{ order.get_total_cost|floatformat:2 }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Button -->
+    <div class="sticky bottom-0 left-0 right-0 mt-4 px-3 md:px-4 py-3 bg-white border-t md:border-none md:bg-transparent">
+      <form action="{% url "payment:process" %}" method="post" class="w-full md:max-w-[320px] md:ml-auto">
+        {% csrf_token %}
+        <button type="submit" 
+                class="w-full h-11 md:h-14 flex items-center justify-center rounded-xl border border-transparent bg-[#111418] px-6 text-sm md:text-base font-medium text-white hover:bg-[#23272c]">
+          {% trans "Pay now" %}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}

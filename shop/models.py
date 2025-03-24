@@ -1,3 +1,4 @@
+from gc import collect
 from django.db import models
 from django.urls import reverse
 from parler.models import TranslatableModel, TranslatedFields
@@ -31,11 +32,12 @@ class Product(TranslatableModel):
         name=models.CharField(max_length=200),
         slug=models.SlugField(max_length=200),
         description=models.TextField(blank=True),
+        details=models.JSONField(blank=True, null=True),
     )
     category = models.ForeignKey(
         Category, related_name="products", on_delete=models.CASCADE
     )
-
+    collection = models.ManyToManyField("Collection", related_name="products", blank=True)
     image = models.ImageField(upload_to="products/%Y/%m/%d", blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     available = models.BooleanField(default=True)
@@ -57,3 +59,27 @@ class Product(TranslatableModel):
 
     def get_absolute_url(self):
         return reverse("shop:product_detail", args=[self.id, self.slug])
+
+class Collection(TranslatableModel):
+    translations = TranslatedFields(
+        name=models.CharField(max_length=200),
+        slug=models.SlugField(max_length=200),
+        slogan=models.CharField(max_length=200, blank=True),
+    )
+    cover = models.ImageField(upload_to="collections/%Y/%m/%d", blank=True)
+
+    class Meta:
+        # ordering = [
+        #     "name",
+        # ]
+        # indexes = [
+        #     models.Index(fields=["name"]),
+        # ]
+        verbose_name = "collection"
+        verbose_name_plural = "collections"
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("shop:product_list_by_collection", args=[self.slug])

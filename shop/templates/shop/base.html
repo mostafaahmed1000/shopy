@@ -4,55 +4,214 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>
-      {% block title %}
-        {% trans 'Shopy' %}
-      {% endblock %}
-    </title>
-    <link href="{% static 'css/base.css' %}" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Changa:wght@300;400;500;600;700"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOPY</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      function toggleMobileMenu() {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+      }
+      function toggleMobileLanguageMenu() {
+        document.getElementById('mobile-language-menu').classList.toggle('hidden');
+      }
+    </script>
   </head>
 
   <body>
-    <div id="header">
-      <a href="/" class="logo">{% trans 'Shopy' %}</a>
-      {% get_current_language as LANGUAGE_CODE %}
-{% get_available_languages as LANGUAGES %}
-{% get_language_info_list for LANGUAGES as languages %}
-<div class="languages">
-<p>{% trans "Language" %}:</p>
-<ul class="languages">
-{% for language in languages %}
-  <li>
-  <a href="/{{ language.code }}/" {% if language.code == LANGUAGE_CODE %} class="selected"{% endif %}>
-    {{ language.name_local }}
-  </a>
-  </li>
-{% endfor %}
-</ul>
-</div>
-    </div>
-    <div id="subheader">
-      <div class="cart">
-        {% with total_items=cart|length %}
-          {% if total_items > 0 %}
-            {% trans 'Your cart' %}:
-            <a href="{% url 'cart:cart_detail' %}">
-              {% blocktrans with total=cart.get_total_price count items=total_items %}
-              {{ items }} item, ${{ total }}
-              {% plural %}
-              {{ items }} items, ${{ total }}
-              {% endblocktrans %}
-            </a>
-          {% elif not order %}
-            {% trans 'Your cart is empty.' %}
-          {% endif %}
-        {% endwith %}
+    {% get_current_language as LANGUAGE_CODE %}
+    {% get_available_languages as LANGUAGES %}
+    {% get_language_info_list for LANGUAGES as languages %}
+    <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden" style='font-family: "Changa", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="sticky top-0 z-50 bg-white flex flex-col md:flex-row items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f4] px-4 md:px-10 py-3">
+          <div class="w-full flex justify-between items-center">
+            <!-- Mobile Menu Button -->
+            <button 
+              class="md:hidden p-2 order-1"
+              onclick="toggleMobileMenu()"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M224 128a8 8 0 0 1-8 8H40a8 8 0 0 1 0-16h176a8 8 0 0 1 8 8ZM40 72h176a8 8 0 0 0 0-16H40a8 8 0 0 0 0 16Zm176 112H40a8 8 0 0 0 0 16h176a8 8 0 0 0 0-16Z"/>
+              </svg>
+            </button>
+
+            <!-- Logo and Search -->
+            <div class="flex items-center gap-4 text-[#111418] flex-1 md:max-w-[600px] order-3 md:order-2">
+              <div class="flex items-center gap-4 justify-end md:justify-start w-full md:w-auto">
+                <div class="size-4">
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </div>
+                <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]"><a href="/{{ LANGUAGE_CODE }}" class="logo">{% trans 'Shopy' %}</a></h2>
+              </div>
+              
+              <!-- Search Form -->
+              <div class="hidden md:block flex-1 ml-4">
+                <form action="{% url 'shop:product_search' %}" method="get" class="flex w-full flex-1 items-stretch rounded-xl h-10">
+                  <button
+                    type="submit"
+                    class="flex items-center justify-center overflow-hidden rounded-l-xl h-10 bg-[#f0f2f4] text-[#111418] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                      <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                    </svg>
+                  </button>
+                  <input
+                    name="q"
+                    placeholder="{% trans 'Search' %}"
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] focus:border-none h-full placeholder:text-[#637588] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                    value="{{ request.GET.q }}"
+                  />
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex flex-1 items-center justify-end">
+            <div class="flex justify-end gap-4 md:gap-8">
+              <div class="relative flex gap-2">
+                <div class="relative">
+                  <button
+                    class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f0f2f4] text-[#111418] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+                    onclick="document.getElementById('language-menu').classList.toggle('hidden')"
+                  >
+                    <span>{{ LANGUAGE_CODE|upper }}</span>
+                    <div class="text-[#111418]" data-icon="Globe" data-size="20px" data-weight="regular">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                        <path
+                          d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM101.63,168h52.74C149,186.34,140,202.87,128,215.89,116,202.87,107,186.34,101.63,168ZM98,152a145.72,145.72,0,0,1,0-48h60a145.72,145.72,0,0,1,0,48ZM40,128a87.61,87.61,0,0,1,3.33-24H81.79a161.79,161.79,0,0,0,0,48H43.33A87.61,87.61,0,0,1,40,128ZM154.37,88H101.63C107,69.66,116,53.13,128,40.11,140,53.13,149,69.66,154.37,88Zm19.84,16h38.46a88.15,88.15,0,0,1,0,48H174.21a161.79,161.79,0,0,0,0-48Zm32.16-16H170.94a142.39,142.39,0,0,0-20.26-45A88.37,88.37,0,0,1,206.37,88ZM105.32,43A142.39,142.39,0,0,0,85.06,88H49.63A88.37,88.37,0,0,1,105.32,43ZM49.63,168H85.06a142.39,142.39,0,0,0,20.26,45A88.37,88.37,0,0,1,49.63,168Zm101.05,45a142.39,142.39,0,0,0,20.26-45h35.43A88.37,88.37,0,0,1,150.68,213Z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </button>
+                  <ul id="language-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg hidden">
+                    {% for language in languages %}
+                    <li class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <a href="/{{ language.code }}/" class="block w-full h-full {% if language.code == LANGUAGE_CODE %} selected {% endif %}">
+                      {{ language.name_local }}
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% with total_items=cart|length %}
+                <a href="{% url 'cart:cart_detail' %}" class="relative">
+                  <button
+                    class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f0f2f4] text-[#111418] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 relative"
+                  >
+                    <div class="text-[#111418]" data-icon="ShoppingCart" data-size="20px" data-weight="regular">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                        <path
+                          d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16h18L59.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,152,204a28,28,0,1,0,28-28H83.17a8,8,0,0,1-7.87-6.57L72.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,222.14,58.87ZM96,204a12,12,0,1,1-12-12A12,12,0,0,1,96,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,192,204Zm4-74.57A8,8,0,0,1,188.1,136H69.22L57.59,72H206.41Z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </button>
+                  {% if total_items > 0 %}
+                  <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                    {{ total_items }}
+                  </span>
+                  {% endif %}
+                </a>
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Mobile Menu -->
+          <div id="mobile-menu" class="hidden w-full md:hidden">
+            <div class="flex flex-col gap-4 py-4">
+              <!-- Mobile Search -->
+              <label class="flex flex-col w-full !h-10">
+                <form action="{% url 'shop:product_search' %}" method="get" class="flex w-full flex-1 items-stretch rounded-xl h-full">
+                  <button
+                    type="submit"
+                    class="flex items-center justify-center overflow-hidden rounded-l-xl h-10 bg-[#f0f2f4] text-[#111418] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                      <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                    </svg>
+                  </button>
+                  <input
+                    name="q"
+                    placeholder="{% trans 'Search' %}"
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] focus:border-none h-full placeholder:text-[#637588] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                    value="{{ request.GET.q }}"
+                  />
+                </form>
+              </label>
+              
+              <!-- Mobile Navigation Items -->
+              <div class="flex justify-between items-center gap-2">
+                <div class="relative">
+                  <button
+                    class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f0f2f4] text-[#111418] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+                    onclick="toggleMobileLanguageMenu()"
+                  >
+                    <span>{{ LANGUAGE_CODE|upper }}</span>
+                    <div class="text-[#111418]" data-icon="Globe" data-size="20px" data-weight="regular">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                        <path
+                          d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM101.63,168h52.74C149,186.34,140,202.87,128,215.89,116,202.87,107,186.34,101.63,168ZM98,152a145.72,145.72,0,0,1,0-48h60a145.72,145.72,0,0,1,0,48ZM40,128a87.61,87.61,0,0,1,3.33-24H81.79a161.79,161.79,0,0,0,0,48H43.33A87.61,87.61,0,0,1,40,128ZM154.37,88H101.63C107,69.66,116,53.13,128,40.11,140,53.13,149,69.66,154.37,88Zm19.84,16h38.46a88.15,88.15,0,0,1,0,48H174.21a161.79,161.79,0,0,0,0-48Zm32.16-16H170.94a142.39,142.39,0,0,0-20.26-45A88.37,88.37,0,0,1,206.37,88ZM105.32,43A142.39,142.39,0,0,0,85.06,88H49.63A88.37,88.37,0,0,1,105.32,43ZM49.63,168H85.06a142.39,142.39,0,0,0,20.26,45A88.37,88.37,0,0,1,49.63,168Zm101.05,45a142.39,142.39,0,0,0,20.26-45h35.43A88.37,88.37,0,0,1,150.68,213Z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </button>
+                  <ul id="mobile-language-menu" class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg hidden z-50">
+                    {% for language in languages %}
+                    <li class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <a href="/{{ language.code }}/" class="block w-full h-full {% if language.code == LANGUAGE_CODE %} selected {% endif %}">
+                        {{ language.name_local }}
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% with total_items=cart|length %}
+                <a href="{% url 'cart:cart_detail' %}" class="relative">
+                  <button
+                    class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#f0f2f4] text-[#111418] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 relative"
+                  >
+                    <div class="text-[#111418]" data-icon="ShoppingCart" data-size="20px" data-weight="regular">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                        <path
+                          d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16h18L59.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,152,204a28,28,0,1,0,28-28H83.17a8,8,0,0,1-7.87-6.57L72.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,222.14,58.87ZM96,204a12,12,0,1,1-12-12A12,12,0,0,1,96,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,192,204Zm4-74.57A8,8,0,0,1,188.1,136H69.22L57.59,72H206.41Z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </button>
+                  {% if total_items > 0 %}
+                  <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                    {{ total_items }}
+                  </span>
+                  {% endif %}
+                </a>
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+        </header>
+        <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col w-full max-w-[960px] flex-1">
+            {% block content %}
+      
+            {% endblock %}
+          </div>
+        </div>
       </div>
     </div>
-    <div id="content">
-      {% block content %}
 
-      {% endblock %}
-    </div>
   </body>
 </html>

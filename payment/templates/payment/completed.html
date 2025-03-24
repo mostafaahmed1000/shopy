@@ -4,6 +4,23 @@
 {% block title %}{% trans "Payment successful" %}{% endblock %}
 
 {% block content %}
-  <h1>{% trans "Your payment was successful" %}</h1>
-  <p>{% trans "Your payment has been processed successfully." %}</p>
+<div class="px-40 flex flex-1 justify-center py-5">
+  <div class="layout-content-container flex flex-col max-w-[960px] flex-1 items-center text-center py-16">
+    <div class="bg-[#ecfdf5] rounded-full p-4 mb-6">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#059669" viewBox="0 0 256 256">
+        <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/>
+      </svg>
+    </div>
+    <h1 class="text-[#111418] text-4xl font-black leading-tight tracking-[-0.033em] mb-4">
+      {% trans "Payment successful" %}
+    </h1>
+    <p class="text-[#637588] text-lg max-w-[480px] mb-8">
+      {% trans "Your payment has been processed successfully." %}
+    </p>
+    <a href="{% url 'shop:product_list' %}" 
+       class="inline-flex h-14 items-center justify-center rounded-xl border border-[#dce0e5] bg-white px-6 text-base font-medium leading-normal text-[#637588] hover:bg-gray-50">
+      {% trans "Continue shopping" %}
+    </a>
+  </div>
+</div>
 {% endblock %}
