@@ -6,6 +6,7 @@ services:
       - "8001:8001"
     environment:
       - DJANGO_SETTINGS_MODULE=shopy.settings.prod
+    restart: unless-stopped
     depends_on:
       - redis
       - rabbitmq
@@ -14,11 +15,13 @@ services:
 
   redis:
     image: redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
 
   rabbitmq:
     image: rabbitmq:management
+    restart: unless-stopped
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -26,6 +29,7 @@ services:
   celery:
       build: .
       command: celery -A shopy worker -l info -P eventlet
+      restart: unless-stopped
       environment:
         - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
       depends_on:
@@ -36,6 +40,7 @@ services:
 
   stripe:
     image: stripe/stripe-cli
+    restart: unless-stopped
     command: listen --forward-to web:8001/payment/webhook/
     depends_on:
       - web
